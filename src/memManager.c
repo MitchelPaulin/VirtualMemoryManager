@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "constants.h"
+#include "common.h"
 
 unsigned int getPhysicalAddress(unsigned int virtualAddress);
 
@@ -19,8 +19,9 @@ int main(int argc, const char *argv[])
     char line[256];
     while (fgets(line, sizeof(line), fp))
     {
-        int mem = atoi(line);
-        printf("%d\n", mem);
+        unsigned int mem = atoi(line);
+        printf("%d %d ", mem, getPageNumber(mem));
+        printf("%d\n", getPageOffset(mem));
     }
 
     fclose(fp);
