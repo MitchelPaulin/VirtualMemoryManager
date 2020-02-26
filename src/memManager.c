@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "common.h"
+#include "tlb.h"
 
 unsigned int getPhysicalAddress(unsigned int virtualAddress);
 
@@ -15,6 +16,9 @@ int main(int argc, const char *argv[])
 
     const char *fileName = argv[1];
     FILE *fp = fopen(fileName, "r");
+
+    // Allocate resources
+    initTlb();
 
     char line[256];
     while (fgets(line, sizeof(line), fp))

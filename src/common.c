@@ -1,4 +1,5 @@
 #include "common.h"
+#include "constants.h"
 
 unsigned int getPageNumber(unsigned int virtualAddress)
 {
