@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "common.h"
 #include "tlb.h"
+#include "page.h"
 
 unsigned int getPhysicalAddress(unsigned int virtualAddress);
 
@@ -19,6 +20,7 @@ int main(int argc, const char *argv[])
 
     // Allocate resources
     initTlb();
+    initPageTable();
 
     char line[256];
     while (fgets(line, sizeof(line), fp))
