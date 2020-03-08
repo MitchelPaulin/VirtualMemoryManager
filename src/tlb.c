@@ -2,6 +2,11 @@
 #include "constants.h"
 #include <stdlib.h>
 
+/*
+    Implementation of a TLB suing the FIFO replacement policy 
+    To this end the implementation will use a linked list
+*/
+
 struct tlbEntry *tlbEntries[TLB_SIZE] = {};
 bool initialized = false;
 
@@ -39,4 +44,9 @@ int getFrameTLB(unsigned int pageNumber)
     }
     //tlb miss
     return SENTINEL;
+}
+
+void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber)
+{
+    //Implement some clever FIFO thing here, for now just look for empty spot
 }

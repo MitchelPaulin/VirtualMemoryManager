@@ -8,6 +8,10 @@
 
 unsigned int getAddress(unsigned int virtualAddress);
 
+//keep track of metrics
+int pageFaults = 0;
+int addressesTranslated = 0;
+
 int main(int argc, const char *argv[])
 {
 
@@ -25,6 +29,7 @@ int main(int argc, const char *argv[])
     initPageTable();
     initMemory();
 
+    //Translate each address in the file
     char line[256];
     while (fgets(line, sizeof(line), fp))
     {
@@ -32,6 +37,15 @@ int main(int argc, const char *argv[])
         unsigned int addr = getAddress(mem);
         char result = getValueAtPhysicalAddress(addr);
         printf("Virtual address: %u Physical address: %u Value: %d\n", mem, addr, result);
+        addressesTranslated++;
+    }
+
+    //Report some statistics
+    printf("Number of Translated Addresses = %d\n", addressesTranslated);
+    printf("Page Faults = %d\n", pageFaults);
+    if (pageFaults > 0)
+    {
+        printf("Page Fault Rate = %lf\n", (double)pageFaults / (double)addressesTranslated);
     }
 
     fclose(fp);
@@ -39,12 +53,13 @@ int main(int argc, const char *argv[])
     return 0;
 }
 
-
 /*
     Attempts to get the physical address from a virtual one by 
     1. Consulting the TLB 
     2. Consulting the PageTable
     3. If both fail, request data be read into memory
+
+    Returns the address of the requested virtual address in physical memory
 */
 unsigned int getAddress(unsigned int virtualAddress)
 {
@@ -62,10 +77,16 @@ unsigned int getAddress(unsigned int virtualAddress)
     }
     else
     {
+        pageFaults++;
+
         //page table miss, value not in memory, request physical memory to load value
         frame = loadValueFromBackingStore(pageNumber);
+
         //update page table with new frame
         insertIntoPageTable(pageNumber, frame);
+
+        //place the new frame into the tlb
+
         //now that the value is in memory we may access it
         return frame * PAGE_SIZE + pageOffset;
     }

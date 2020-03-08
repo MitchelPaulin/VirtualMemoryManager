@@ -5,7 +5,7 @@
 #include <stdbool.h>
 
 /*
-    Get the value at the specified frameNumber and offset
+    Get the value at the specified frame number and offset
 */
 char getValueAtPhysicalAddress(int address);
 

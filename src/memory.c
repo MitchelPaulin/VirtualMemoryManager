@@ -40,7 +40,6 @@ int loadValueFromBackingStore(int frameNumber)
         for (int i = 0; i < PAGE_SIZE; i++)
         {
             fread(&physicalMemory[freeFramePointer * PAGE_SIZE + i], sizeof(char), 1, fp);
-            // printf("%d\n", physicalMemory[freeFramePointer * PAGE_SIZE + i]);
         }
         return freeFramePointer;
     }

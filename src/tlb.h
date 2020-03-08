@@ -23,4 +23,6 @@ bool initTlb();
 */
 int getFrameTLB(unsigned int pageNumber);
 
+void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber);
+
 #endif
