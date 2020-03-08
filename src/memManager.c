@@ -3,9 +3,10 @@
 #include "common.h"
 #include "tlb.h"
 #include "pageTable.h"
+#include "memory.h"
 #include "constants.h"
 
-unsigned int getPhysicalAddress(unsigned int virtualAddress);
+unsigned int getAddress(unsigned int virtualAddress);
 
 int main(int argc, const char *argv[])
 {
@@ -22,13 +23,15 @@ int main(int argc, const char *argv[])
     // Allocate resources
     initTlb();
     initPageTable();
+    initMemory();
 
     char line[256];
     while (fgets(line, sizeof(line), fp))
     {
         unsigned int mem = atoi(line);
-        printf("%d %d ", mem, getPageNumber(mem));
-        printf("%d\n", getPageOffset(mem));
+        unsigned int addr = getAddress(mem);
+        char result = getValueAtPhysicalAddress(addr);
+        printf("Virtual address: %u Physical address: %u Value: %u\n", mem, addr, result);
     }
 
     fclose(fp);
@@ -36,10 +39,10 @@ int main(int argc, const char *argv[])
     return 0;
 }
 
-unsigned int getPhysicalAddress(unsigned int virtualAddress)
+unsigned int getAddress(unsigned int virtualAddress)
 {
     const unsigned int pageNumber = getPageNumber(virtualAddress);
-    const unsigned int pageOffset = getPageOffset(virtualAddress); 
+    const unsigned int pageOffset = getPageOffset(virtualAddress);
 
     // first consult the TLB (TO BE DONE)
 
@@ -48,12 +51,20 @@ unsigned int getPhysicalAddress(unsigned int virtualAddress)
     if (frame != SENTINEL)
     {
         //page hit, return value from physical memory
-
-        return 1; 
+        return frame * PAGE_SIZE + pageOffset;
+    }
+    else
+    {
+        //page table miss, value not in memory, request physical memory to load value
+        frame = loadValueFromBackingStore(pageNumber);
+        //update page table with new frame
+        insertIntoPageTable(pageNumber, frame);
+        //now that the value is in memory we may access it
+        return frame * PAGE_SIZE + pageOffset;
     }
 
-    // if a page fault occurs the page we want is not in memory 
-    // we load the file from the backing store into memory, update the page table, update the TLB 
+    // if a page fault occurs the page we want is not in memory
+    // we load the file from the backing store into memory, update the page table, update the TLB
 
     return 0;
 }

@@ -1,6 +1,7 @@
 CC = gcc
 SRC_DIR = ./src
 
-all: $(SRC_DIR)/common.c $(SRC_DIR)/memManager.c $(SRC_DIR)/tlb.c $(SRC_DIR)/pageTable.c
+all: $(SRC_DIR)/common.c $(SRC_DIR)/memManager.c $(SRC_DIR)/tlb.c $(SRC_DIR)/pageTable.c $(SRC_DIR)/memory.c
 	@mkdir -p ./bin
-	$(CC) $(SRC_DIR)/common.c $(SRC_DIR)/memManager.c $(SRC_DIR)/tlb.c $(SRC_DIR)/pageTable.c -o ./bin/a.out
+	@rm ./bin/a.out
+	$(CC) $(SRC_DIR)/common.c $(SRC_DIR)/memManager.c $(SRC_DIR)/tlb.c $(SRC_DIR)/pageTable.c $(SRC_DIR)/memory.c -o ./bin/a.out

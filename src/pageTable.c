@@ -10,7 +10,12 @@ void initPageTable()
     }
 }
 
-int getFramePageTable(unsigned pageNumber)
+int getFramePageTable(unsigned int pageNumber)
 {
     return pageTable[pageNumber];
+}
+
+void insertIntoPageTable(int pageNumber, int frameNumber)
+{
+    pageTable[pageNumber] = frameNumber;
 }
