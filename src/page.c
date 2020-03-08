@@ -6,11 +6,11 @@ void initPageTable()
 {
     for (int i = 0; i < PAGE_SIZE; i++)
     {
-        pageTable[i] = i;
+        pageTable[i] = SENTINEL;
     }
 }
 
-int getFrameNumber(unsigned pageNumber)
+int getFramePageTable(unsigned pageNumber)
 {
-    return 0;
+    return pageTable[pageNumber];
 }

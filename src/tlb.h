@@ -21,6 +21,6 @@ bool initTlb();
     Determine if a page exists in the TLB table
     If it exists return the frame number, else -1
 */
-int pageExists(unsigned int pageNumber);
+int getFrameTLB(unsigned int pageNumber);
 
 #endif

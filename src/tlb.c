@@ -2,8 +2,6 @@
 #include "constants.h"
 #include <stdlib.h>
 
-#define SENTINEL -1
-
 struct tlbEntry *tlbEntries[TLB_SIZE] = {};
 bool initialized = false;
 
@@ -29,7 +27,7 @@ bool initTlb()
     return true;
 }
 
-int pageExists(unsigned int pageNumber)
+int getFrameTLB(unsigned int pageNumber)
 {
     for (int i = 0; i < TLB_SIZE; i++)
     {
