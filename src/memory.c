@@ -36,8 +36,12 @@ int loadValueFromBackingStore(int frameNumber)
     {
         //requested a page that is not yet in memory
         freeFramePointer++;
-        fseek(fp, frameNumber * PAGE_SIZE, 0);
-        fread(&physicalMemory[freeFramePointer * PAGE_SIZE], sizeof(PAGE_SIZE), 1, fp);
+        fseek(fp, frameNumber * PAGE_SIZE, SEEK_SET);
+        for (int i = 0; i < PAGE_SIZE; i++)
+        {
+            fread(&physicalMemory[freeFramePointer * PAGE_SIZE + i], sizeof(char), 1, fp);
+            // printf("%d\n", physicalMemory[freeFramePointer * PAGE_SIZE + i]);
+        }
         return freeFramePointer;
     }
     else

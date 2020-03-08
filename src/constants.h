@@ -6,7 +6,7 @@
 #define PAGE_TABLE_SIZE 256
 #define PAGE_SIZE 256
 #define TLB_SIZE 16
-#define FRAMES 128
+#define FRAMES 256
 #define SENTINEL -1
 
 #endif

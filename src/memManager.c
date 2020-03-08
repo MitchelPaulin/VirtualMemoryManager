@@ -31,7 +31,7 @@ int main(int argc, const char *argv[])
         unsigned int mem = atoi(line);
         unsigned int addr = getAddress(mem);
         char result = getValueAtPhysicalAddress(addr);
-        printf("Virtual address: %u Physical address: %u Value: %u\n", mem, addr, result);
+        printf("Virtual address: %u Physical address: %u Value: %d\n", mem, addr, result);
     }
 
     fclose(fp);
@@ -39,6 +39,13 @@ int main(int argc, const char *argv[])
     return 0;
 }
 
+
+/*
+    Attempts to get the physical address from a virtual one by 
+    1. Consulting the TLB 
+    2. Consulting the PageTable
+    3. If both fail, request data be read into memory
+*/
 unsigned int getAddress(unsigned int virtualAddress)
 {
     const unsigned int pageNumber = getPageNumber(virtualAddress);
