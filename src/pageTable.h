@@ -1,5 +1,5 @@
-#ifndef PAGE_H
-#define PAGE_H
+#ifndef PAGE_TABLE_H
+#define PAGE_TABLE_H
 /*
     Init the page table to sentinel values
 */

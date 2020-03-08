@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "common.h"
 #include "tlb.h"
-#include "page.h"
+#include "pageTable.h"
 #include "constants.h"
 
 unsigned int getPhysicalAddress(unsigned int virtualAddress);
