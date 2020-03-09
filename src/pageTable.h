@@ -14,6 +14,6 @@ int getFramePageTable(unsigned int pageNumber);
 /*
     Place a pageNumber, frameNumber pair into the page table
 */
-void insertIntoPageTable(int pageNumber, int frameNumber);
+void insertIntoPageTable(unsigned int pageNumber, unsigned int frameNumber);
 
 #endif

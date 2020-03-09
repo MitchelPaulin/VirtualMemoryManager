@@ -7,7 +7,7 @@
 /*
     Get the value at the specified frame number and offset
 */
-char getValueAtPhysicalAddress(int address);
+char getValueAtPhysicalAddress(unsigned int address);
 
 /*
     Initialize memory
@@ -20,7 +20,7 @@ bool initMemory();
     If the frame is not currently in memory, load it from the backing store
     Returns the frame number it was loaded into
 */
-int loadValueFromBackingStore(int frameNumber);
+unsigned int loadValueFromBackingStore(unsigned int frameNumber);
 
 
 #endif

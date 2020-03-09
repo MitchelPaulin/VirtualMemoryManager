@@ -39,7 +39,7 @@ bool initTlb()
     return true;
 }
 
-int getFrameFromTLB(unsigned int pageNumber)
+unsigned int getFrameFromTLB(unsigned int pageNumber)
 {
     struct tlbEntry *temp = head;
     do

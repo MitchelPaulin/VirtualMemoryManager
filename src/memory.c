@@ -8,7 +8,7 @@ char physicalMemory[FRAMES * PAGE_SIZE] = {};
     Points to the current free frame, once this is greater than the number of frames
     we need to start using a replacement algorithim
 */
-int freeFramePointer = -1;
+unsigned int freeFramePointer = 0;
 
 FILE *fp;
 
@@ -25,19 +25,18 @@ bool initMemory()
     return true;
 }
 
-char getValueAtPhysicalAddress(int address)
+char getValueAtPhysicalAddress(unsigned int address)
 {
     return physicalMemory[address];
 }
 
-int loadValueFromBackingStore(int frameNumber)
+unsigned int loadValueFromBackingStore(unsigned int frameNumber)
 {
     
     /*
         Using modulo here is equivalent to a FIFO replacement approach
         This is because memory was filled in order
     */
-    freeFramePointer++;
     freeFramePointer = freeFramePointer % FRAMES;
 
 
@@ -46,5 +45,5 @@ int loadValueFromBackingStore(int frameNumber)
     {
         fread(&physicalMemory[freeFramePointer * PAGE_SIZE + i], sizeof(char), 1, fp);
     }
-    return freeFramePointer;
+    return freeFramePointer++;
 }

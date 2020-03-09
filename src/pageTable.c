@@ -1,6 +1,6 @@
 #include "constants.h"
 
-int pageTable[PAGE_SIZE];
+unsigned int pageTable[PAGE_SIZE];
 
 void initPageTable()
 {
@@ -10,12 +10,12 @@ void initPageTable()
     }
 }
 
-int getFramePageTable(unsigned int pageNumber)
+unsigned int getFramePageTable(unsigned int pageNumber)
 {
     return pageTable[pageNumber];
 }
 
-void insertIntoPageTable(int pageNumber, int frameNumber)
+void insertIntoPageTable(unsigned int pageNumber, unsigned int frameNumber)
 {
     pageTable[pageNumber] = frameNumber;
 }
