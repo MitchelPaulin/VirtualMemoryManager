@@ -1,6 +1,7 @@
 #include "tlb.h"
 #include "constants.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 /*
     Implementation of a TLB suing the FIFO replacement policy 
@@ -83,6 +84,16 @@ void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber)
         tail->frameNumber = frameNumber;
         tail->pageNumber = pageNumber;
         tail->next = NULL;
+    }
+}
+
+void printTLB()
+{
+    struct tlbEntry *temp = head;
+    while (temp)
+    {
+        printf("%u %u\n", temp->pageNumber, temp->frameNumber);
+        temp = temp->next;
     }
 }
 

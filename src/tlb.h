@@ -34,4 +34,9 @@ void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber);
 */
 void freeTLB();
 
+/*
+    Print out the tlb for debugging
+*/
+void printTLB();
+
 #endif
