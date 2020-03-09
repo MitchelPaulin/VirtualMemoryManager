@@ -43,13 +43,13 @@ int main(int argc, const char *argv[])
 
     //Report some statistics
     printf("Number of Translated Addresses = %d\n", addressesTranslated);
-    printf("Page Faults = %d\n", pageFaults);
-    if (pageFaults > 0)
+    if (addressesTranslated > 0)
     {
+        printf("Page Faults = %d\n", pageFaults);
         printf("Page Fault Rate = %lf\n", (double)pageFaults / (double)addressesTranslated);
+        printf("TLB Hits = %d\n", TLBHits);
+        printf("TLB Hit Rate = %lf\n", (double)TLBHits / (double)addressesTranslated);
     }
-    printf("TLB Hits = %d\n", TLBHits);
-    printf("TLB Hit Rate = %lf\n", (double)TLBHits / (double)addressesTranslated);
 
     fclose(fp);
     freeTLB();
@@ -71,7 +71,7 @@ unsigned int getAddress(unsigned int virtualAddress)
     const unsigned int pageOffset = getPageOffset(virtualAddress);
 
     // first consult the TLB
-    int frame = getFrameFromTLB(pageNumber);
+    unsigned int frame = getFrameFromTLB(pageNumber);
     if (frame == SENTINEL)
     {
         frame = getFramePageTable(pageNumber);
