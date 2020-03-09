@@ -62,7 +62,7 @@ void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber)
         struct tlbEntry *temp = head;
         do
         {
-            if (temp->pageNumber == SENTINEL)
+            if (temp->pageNumber == (unsigned int)SENTINEL)
             {
                 temp->pageNumber = pageNumber;
                 temp->frameNumber = frameNumber;

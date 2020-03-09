@@ -71,33 +71,20 @@ unsigned int getAddress(unsigned int virtualAddress)
 
     // first consult the TLB
     int frame = getFrameFromTLB(pageNumber);
-    if (frame != SENTINEL)
+    if (frame == SENTINEL)
+    {
+        frame = getFramePageTable(pageNumber);
+        if (frame == SENTINEL)
+        {
+            pageFaults++;
+            frame = loadValueFromBackingStore(pageNumber);
+            insertIntoPageTable(pageNumber, frame);
+        }
+        insertIntoTLB(pageNumber, frame);
+    }
+    else
     {
         TLBHits++;
-        goto TLB_HIT;
     }
-
-    // if a TLB miss occurs, consult page table
-    frame = getFramePageTable(pageNumber);
-    if (frame != SENTINEL)
-    {
-        goto PAGE_HIT;
-    }
-
-    //miss on tlb and page table, page fault occured
-    pageFaults++;
-    goto PAGE_FAULT;
-
-PAGE_FAULT:
-    //page table miss, value not in memory, request physical memory to load value
-    frame = loadValueFromBackingStore(pageNumber);
-
-    //update page table with new frame
-    insertIntoPageTable(pageNumber, frame);
-
-PAGE_HIT:
-    insertIntoTLB(pageNumber, frame);
-
-TLB_HIT:
     return frame * PAGE_SIZE + pageOffset;
 }

@@ -32,19 +32,19 @@ char getValueAtPhysicalAddress(int address)
 
 int loadValueFromBackingStore(int frameNumber)
 {
-    if (freeFramePointer < FRAMES)
+    
+    /*
+        Using modulo here is equivalent to a FIFO replacement approach
+        This is because memory was filled in order
+    */
+    freeFramePointer++;
+    freeFramePointer = freeFramePointer % FRAMES;
+
+
+    fseek(fp, frameNumber * PAGE_SIZE, SEEK_SET);
+    for (int i = 0; i < PAGE_SIZE; i++)
     {
-        //requested a page that is not yet in memory
-        freeFramePointer++;
-        fseek(fp, frameNumber * PAGE_SIZE, SEEK_SET);
-        for (int i = 0; i < PAGE_SIZE; i++)
-        {
-            fread(&physicalMemory[freeFramePointer * PAGE_SIZE + i], sizeof(char), 1, fp);
-        }
-        return freeFramePointer;
+        fread(&physicalMemory[freeFramePointer * PAGE_SIZE + i], sizeof(char), 1, fp);
     }
-    else
-    {
-        //implement page replacement algo here
-    }
+    return freeFramePointer;
 }
