@@ -28,7 +28,7 @@ bool initTlb()
     //Create a linked list of TLB blocks
     head = (struct tlbEntry *)malloc(sizeof(struct tlbEntry));
     tail = head;
-    for (int i = 0; i < TLB_SIZE; i++)
+    for (int i = 0; i < TLB_SIZE - 1; i++)
     {
         tail->next = (struct tlbEntry *)malloc(sizeof(struct tlbEntry));
         tail = tail->next;
@@ -80,8 +80,8 @@ void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber)
         free(temp);
         tail->next = (struct tlbEntry *)malloc(sizeof(struct tlbEntry));
         tail = tail->next;
-        tail->frameNumber = pageNumber;
-        tail->pageNumber = frameNumber;
+        tail->frameNumber = frameNumber;
+        tail->pageNumber = pageNumber;
         tail->next = NULL;
     }
 }
