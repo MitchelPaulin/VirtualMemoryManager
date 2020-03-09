@@ -7,8 +7,11 @@
     To this end the implementation will use a linked list
 */
 
-struct tlbEntry *tlbEntries[TLB_SIZE] = {};
+struct tlbEntry *head;
+struct tlbEntry *tail;
 bool initialized = false;
+
+int TLBSize = 0;
 
 bool initTlb()
 {
@@ -22,31 +25,63 @@ bool initTlb()
 
     initialized = true;
 
+    //Create a linked list of TLB blocks
+    head = (struct tlbEntry *)malloc(sizeof(struct tlbEntry));
+    tail = head;
     for (int i = 0; i < TLB_SIZE; i++)
     {
-        tlbEntries[i] = (struct tlbEntry *)malloc(sizeof(struct tlbEntry));
-        tlbEntries[i]->frameNumber = SENTINEL;
-        tlbEntries[i]->pageNumber = SENTINEL;
+        tail->next = (struct tlbEntry *)malloc(sizeof(struct tlbEntry));
+        tail = tail->next;
+        tail->frameNumber = SENTINEL;
+        tail->pageNumber = SENTINEL;
     }
-
+    tail->next = NULL;
     return true;
 }
 
-int getFrameTLB(unsigned int pageNumber)
+int getFrameFromTLB(unsigned int pageNumber)
 {
-    for (int i = 0; i < TLB_SIZE; i++)
+    struct tlbEntry *temp = head;
+    do
     {
-        if (tlbEntries[i]->pageNumber == pageNumber)
+        if (temp->pageNumber == pageNumber)
         {
-            //tlb hit
-            return tlbEntries[i]->frameNumber;
+            return temp->frameNumber;
         }
-    }
+        temp = temp->next;
+    } while (temp);
     //tlb miss
     return SENTINEL;
 }
 
 void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber)
 {
-    //Implement some clever FIFO thing here, for now just look for empty spot
+    if (TLBSize < TLB_SIZE)
+    {
+        //there are still empty spots in the TLB, find a place to insert the value
+        struct tlbEntry *temp = head;
+        do
+        {
+            if (temp->pageNumber == SENTINEL)
+            {
+                temp->pageNumber = pageNumber;
+                temp->frameNumber = frameNumber;
+                break;
+            }
+            temp = temp->next;
+        } while (temp);
+        TLBSize++;
+    }
+    else
+    {
+        //tlb is full, pop from queue and create new tlb at the head
+        struct tlbEntry *temp = head;
+        head = head->next;
+        free(temp);
+        tail->next = (struct tlbEntry *)malloc(sizeof(struct tlbEntry));
+        tail = tail->next;
+        tail->frameNumber = pageNumber;
+        tail->pageNumber = frameNumber;
+        tail->next = NULL;
+    }
 }

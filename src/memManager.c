@@ -11,6 +11,7 @@ unsigned int getAddress(unsigned int virtualAddress);
 //keep track of metrics
 int pageFaults = 0;
 int addressesTranslated = 0;
+int TLBHits = 0;
 
 int main(int argc, const char *argv[])
 {
@@ -47,6 +48,8 @@ int main(int argc, const char *argv[])
     {
         printf("Page Fault Rate = %lf\n", (double)pageFaults / (double)addressesTranslated);
     }
+    printf("TLB Hits = %d\n", TLBHits);
+    printf("TLB Hit Rate = %lf\n", (double)TLBHits / (double)addressesTranslated);
 
     fclose(fp);
 
@@ -66,33 +69,35 @@ unsigned int getAddress(unsigned int virtualAddress)
     const unsigned int pageNumber = getPageNumber(virtualAddress);
     const unsigned int pageOffset = getPageOffset(virtualAddress);
 
-    // first consult the TLB (TO BE DONE)
-
-    // if a TLB miss occurs, consult page table
-    int frame = getFramePageTable(pageNumber);
+    // first consult the TLB
+    int frame = getFrameFromTLB(pageNumber);
     if (frame != SENTINEL)
     {
-        //page hit, return value from physical memory
-        return frame * PAGE_SIZE + pageOffset;
+        TLBHits++;
+        goto TLB_HIT;
     }
-    else
+
+    // if a TLB miss occurs, consult page table
+    frame = getFramePageTable(pageNumber);
+    if (frame != SENTINEL)
     {
-        pageFaults++;
-
-        //page table miss, value not in memory, request physical memory to load value
-        frame = loadValueFromBackingStore(pageNumber);
-
-        //update page table with new frame
-        insertIntoPageTable(pageNumber, frame);
-
-        //place the new frame into the tlb
-
-        //now that the value is in memory we may access it
-        return frame * PAGE_SIZE + pageOffset;
+        goto PAGE_HIT;
     }
 
-    // if a page fault occurs the page we want is not in memory
-    // we load the file from the backing store into memory, update the page table, update the TLB
+    //miss on tlb and page table, page fault occured
+    pageFaults++;
+    goto PAGE_FAULT;
 
-    return 0;
+PAGE_FAULT:
+    //page table miss, value not in memory, request physical memory to load value
+    frame = loadValueFromBackingStore(pageNumber);
+
+    //update page table with new frame
+    insertIntoPageTable(pageNumber, frame);
+
+PAGE_HIT:
+    insertIntoTLB(pageNumber, frame);
+
+TLB_HIT:
+    return frame * PAGE_SIZE + pageOffset;
 }

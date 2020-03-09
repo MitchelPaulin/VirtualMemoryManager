@@ -8,6 +8,7 @@ struct tlbEntry
 {
     unsigned int pageNumber;
     unsigned int frameNumber;
+    struct tlbEntry* next;
 };
 
 /*
@@ -21,8 +22,11 @@ bool initTlb();
     Determine if a page exists in the TLB table
     If it exists return the frame number, else -1
 */
-int getFrameTLB(unsigned int pageNumber);
+int getFrameFromTLB(unsigned int pageNumber);
 
+/*
+    Insert a value into the TLB, using the FIFO replacement algorithim
+*/
 void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber);
 
 #endif
