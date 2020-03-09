@@ -85,3 +85,16 @@ void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber)
         tail->next = NULL;
     }
 }
+
+void freeTLB()
+{
+    struct tlbEntry *temp;
+    while (head->next)
+    {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+    free(head);
+    initialized = false;
+}

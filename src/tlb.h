@@ -8,7 +8,7 @@ struct tlbEntry
 {
     unsigned int pageNumber;
     unsigned int frameNumber;
-    struct tlbEntry* next;
+    struct tlbEntry *next;
 };
 
 /*
@@ -28,5 +28,10 @@ int getFrameFromTLB(unsigned int pageNumber);
     Insert a value into the TLB, using the FIFO replacement algorithim
 */
 void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber);
+
+/*
+    Deallocate the tlb resources
+*/
+void freeTLB();
 
 #endif

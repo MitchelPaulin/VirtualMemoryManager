@@ -52,6 +52,7 @@ int main(int argc, const char *argv[])
     printf("TLB Hit Rate = %lf\n", (double)TLBHits / (double)addressesTranslated);
 
     fclose(fp);
+    freeTLB();
 
     return 0;
 }
