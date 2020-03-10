@@ -38,7 +38,7 @@ unsigned int loadValueFromBackingStore(unsigned int frameNumber)
         Here we use a simple policy to decide what frame should be overwritten 
         Just loop around and start from frame zero
 
-        Note in real memory we would need some kind of table to keep track of free frames
+        Note in a multiprocess system we would need some kind of table to keep track of free frames
     */
 
     unsigned int circularFreeFramePointer = freeFramePointer;
@@ -54,11 +54,13 @@ unsigned int loadValueFromBackingStore(unsigned int frameNumber)
 
     circularFreeFramePointer = freeFramePointer % FRAMES;
 
+    // Read from backing store
     fseek(fp, frameNumber * PAGE_SIZE, SEEK_SET);
     for (int i = 0; i < PAGE_SIZE; i++)
     {
         fread(&physicalMemory[circularFreeFramePointer * PAGE_SIZE + i], sizeof(char), 1, fp);
     }
+    
     freeFramePointer++;
     return circularFreeFramePointer;
 }

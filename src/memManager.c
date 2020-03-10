@@ -1,3 +1,8 @@
+/*
+    Mitchel Paulin 
+    March 2020
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "common.h"
@@ -8,7 +13,7 @@
 
 unsigned int getAddress(unsigned int virtualAddress);
 
-//keep track of metrics
+// Keep track of metrics
 int pageFaults = 0;
 int addressesTranslated = 0;
 int TLBHits = 0;
@@ -31,7 +36,7 @@ int main(int argc, const char *argv[])
     initPageTable();
     initMemory();
 
-    //Translate each address in the file
+    // Translate each address in the file
     char line[256];
     while (fgets(line, sizeof(line), fp))
     {
@@ -42,7 +47,7 @@ int main(int argc, const char *argv[])
         addressesTranslated++;
     }
 
-    //Report some statistics
+    // Report some statistics
     printf("Number of Translated Addresses = %d\n", addressesTranslated);
     if (addressesTranslated > 0)
     {
@@ -73,18 +78,20 @@ unsigned int getAddress(unsigned int virtualAddress)
     const unsigned int pageNumber = getPageNumber(virtualAddress);
     const unsigned int pageOffset = getPageOffset(virtualAddress);
 
-    // first consult the TLB
+    // First consult the TLB
     unsigned int frame = getFrameFromTLB(pageNumber);
     if (frame == SENTINEL)
     {
+        // Upon failure consult page table
         frame = getFramePageTable(pageNumber);
         if (frame == SENTINEL)
         {
+            // Upon failure load from backing store
             pageFaults++;
             frame = loadValueFromBackingStore(pageNumber);
             if (frameOverwritten == 1)
             {
-                //most recent load caused a frame to be overwritten, clean page table and TLB
+                // Most recent load caused a frame to be overwritten, clean page table and TLB
                 unsigned int invalidPage = popPageQueue();
                 invalidatePageTLB(invalidPage);
                 frameCollisions++;

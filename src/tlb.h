@@ -20,12 +20,12 @@ bool initTlb();
 
 /*
     Determine if a page exists in the TLB table
-    If it exists return the frame number, else -1
+    If it exists return the frame number, else return the SENTINEL value 
 */
 unsigned int getFrameFromTLB(unsigned int pageNumber);
 
 /*
-    Insert a value into the TLB, using the FIFO replacement algorithim
+    Insert a value into the TLB using the FIFO replacement algorithim
 */
 void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber);
 
@@ -35,12 +35,12 @@ void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber);
 void invalidatePageTLB(unsigned int pageNumber);
 
 /*
-    Deallocate the tlb resources
+    Deallocate the TLB resources
 */
 void freeTLB();
 
 /*
-    Print out the tlb for debugging
+    Print out the TLB, used for debugging
 */
 void printTLB();
 

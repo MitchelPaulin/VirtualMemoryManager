@@ -1,7 +1,9 @@
 #ifndef PAGE_TABLE_H
 #define PAGE_TABLE_H
+
 /*
     Init the page table to sentinel values
+    Should be called before any page table methods
 */
 void initPageTable();
 

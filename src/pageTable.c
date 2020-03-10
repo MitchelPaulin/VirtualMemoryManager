@@ -2,6 +2,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/*
+    Implementation of a page table using the FIFO replacement policy 
+    To this end the implementation will use a linked list
+*/
+
 unsigned int pageTable[PAGE_SIZE];
 
 struct pageNumberEntry
@@ -37,7 +42,7 @@ unsigned int popPageQueue()
         struct pageNumberEntry *temp = pageHead;
         pageHead = pageHead->next;
         free(temp);
-        //invalidate page
+        // Invalidate page
         pageTable[invalidPage] = SENTINEL;
         return invalidPage;
     }

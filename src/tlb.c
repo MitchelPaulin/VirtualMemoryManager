@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 /*
-    Implementation of a TLB suing the FIFO replacement policy 
+    Implementation of a TLB using the FIFO replacement policy 
     To this end the implementation will use a linked list
 */
 
@@ -59,7 +59,7 @@ void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber)
 {
     if (TLBSize < TLB_SIZE)
     {
-        //there are still empty spots in the TLB, find a place to insert the value
+        // There are still empty spots in the TLB, find a place to insert the value
         struct tlbEntry *temp = tlbHead;
         do
         {
@@ -75,7 +75,7 @@ void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber)
     }
     else
     {
-        //tlb is full, pop from queue and create new tlb at the tlbHead
+        // Tlb is full, pop from queue and create new tlb at the tlbHead
         struct tlbEntry *temp = tlbHead;
         tlbHead = tlbHead->next;
         free(temp);
@@ -96,7 +96,7 @@ void invalidatePageTLB(unsigned int p)
         {
             temp->pageNumber = SENTINEL;
             temp->frameNumber = SENTINEL;
-            TLBSize--; //decrease size so we can insert a new value in this spot
+            TLBSize--; // Decrease size so we can insert a new value in this spot
             return;
         }
         temp = temp->next;
