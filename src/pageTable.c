@@ -33,11 +33,13 @@ unsigned int popPageQueue()
 {
     if (pageHead)
     {
-        unsigned int returnValue = pageHead->pageNumber;
+        unsigned int invalidPage = pageHead->pageNumber;
         struct pageNumberEntry *temp = pageHead;
         pageHead = pageHead->next;
         free(temp);
-        return returnValue;
+        //invalidate page
+        pageTable[invalidPage] = SENTINEL;
+        return invalidPage;
     }
     return SENTINEL;
 }

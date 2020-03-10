@@ -80,6 +80,12 @@ unsigned int getAddress(unsigned int virtualAddress)
         {
             pageFaults++;
             frame = loadValueFromBackingStore(pageNumber);
+            if (frameOverwritten == 1)
+            {
+                //most recent load caused a frame to be overwritten, clean page table and TLB
+                unsigned int invalidPage = popPageQueue();
+                invalidatePageTLB(invalidPage);
+            }
             insertIntoPageTable(pageNumber, frame);
         }
         insertIntoTLB(pageNumber, frame);

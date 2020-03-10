@@ -17,7 +17,7 @@ int getFramePageTable(unsigned int pageNumber);
 void insertIntoPageTable(unsigned int pageNumber, unsigned int frameNumber);
 
 /*
-    Pop the first page from the FIFO queue
+    Pop the first page from the FIFO queue and invalidate the page table value
     Return the page number that was popped or SENTINEL if no page could be popped
 */
 unsigned int popPageQueue();

@@ -1,6 +1,7 @@
 #include "memory.h"
 #include "stdio.h"
 #include "stdlib.h"
+#include "common.h"
 
 char physicalMemory[FRAMES * PAGE_SIZE] = {};
 
@@ -32,18 +33,32 @@ char getValueAtPhysicalAddress(unsigned int address)
 
 unsigned int loadValueFromBackingStore(unsigned int frameNumber)
 {
-    
-    /*
-        Using modulo here is equivalent to a FIFO replacement approach
-        This is because memory was filled in order
-    */
-    freeFramePointer = freeFramePointer % FRAMES;
 
+    /*
+        Here we use a simple policy to decide what frame should be overwritten 
+        Just loop around and start from frame zero
+
+        Note in real memory we would need some kind of table to keep track of free frames
+    */
+
+    unsigned int circularFreeFramePointer = freeFramePointer;
+
+    if (freeFramePointer > FRAMES)
+    {
+        frameOverwritten = 1;
+    }
+    else
+    {
+        frameOverwritten = 0;
+    }
+
+    circularFreeFramePointer = freeFramePointer % FRAMES;
 
     fseek(fp, frameNumber * PAGE_SIZE, SEEK_SET);
     for (int i = 0; i < PAGE_SIZE; i++)
     {
-        fread(&physicalMemory[freeFramePointer * PAGE_SIZE + i], sizeof(char), 1, fp);
+        fread(&physicalMemory[circularFreeFramePointer * PAGE_SIZE + i], sizeof(char), 1, fp);
     }
-    return freeFramePointer++;
+    freeFramePointer++;
+    return circularFreeFramePointer;
 }

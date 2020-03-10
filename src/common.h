@@ -11,4 +11,10 @@ unsigned int getPageNumber(unsigned int virtualAddress);
 */
 unsigned int getPageOffset(unsigned int virtualAddress);
 
+/*
+    Set to 1 if a frame in the page table was overwritten 
+    Set to 0 otherwise
+*/
+char frameOverwritten;
+
 #endif
