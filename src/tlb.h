@@ -30,6 +30,11 @@ unsigned int getFrameFromTLB(unsigned int pageNumber);
 void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber);
 
 /*
+    Remove a page from the TLB
+*/
+void invalidatePageTLB(unsigned int pageNumber);
+
+/*
     Deallocate the tlb resources
 */
 void freeTLB();

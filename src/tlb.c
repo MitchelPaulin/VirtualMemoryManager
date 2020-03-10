@@ -87,6 +87,22 @@ void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber)
     }
 }
 
+void invalidatePageTLB(unsigned int p)
+{
+    struct tlbEntry *temp = head;
+    while (temp)
+    {
+        if (temp->pageNumber == p)
+        {
+            temp->pageNumber = SENTINEL;
+            temp->frameNumber = SENTINEL;
+            TLBSize--; //decrease size so we can insert a new value in this spot
+            return;
+        }
+        temp = temp->next;
+    }
+}
+
 void printTLB()
 {
     struct tlbEntry *temp = head;
