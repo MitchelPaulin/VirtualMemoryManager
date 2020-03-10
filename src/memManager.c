@@ -12,6 +12,7 @@ unsigned int getAddress(unsigned int virtualAddress);
 int pageFaults = 0;
 int addressesTranslated = 0;
 int TLBHits = 0;
+int frameCollisions = 0;
 
 int main(int argc, const char *argv[])
 {
@@ -49,6 +50,7 @@ int main(int argc, const char *argv[])
         printf("Page Fault Rate = %lf\n", (double)pageFaults / (double)addressesTranslated);
         printf("TLB Hits = %d\n", TLBHits);
         printf("TLB Hit Rate = %lf\n", (double)TLBHits / (double)addressesTranslated);
+        printf("Frame collision rate = %lf\n", (double)frameCollisions / (double)addressesTranslated);
     }
 
     fclose(fp);
@@ -85,6 +87,7 @@ unsigned int getAddress(unsigned int virtualAddress)
                 //most recent load caused a frame to be overwritten, clean page table and TLB
                 unsigned int invalidPage = popPageQueue();
                 invalidatePageTLB(invalidPage);
+                frameCollisions++;
             }
             insertIntoPageTable(pageNumber, frame);
         }
