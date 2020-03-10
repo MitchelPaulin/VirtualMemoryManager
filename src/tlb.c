@@ -8,8 +8,8 @@
     To this end the implementation will use a linked list
 */
 
-struct tlbEntry *head;
-struct tlbEntry *tail;
+struct tlbEntry *tlbHead;
+struct tlbEntry *tlbTail;
 bool initialized = false;
 
 int TLBSize = 0;
@@ -27,22 +27,22 @@ bool initTlb()
     initialized = true;
 
     //Create a linked list of TLB blocks
-    head = (struct tlbEntry *)malloc(sizeof(struct tlbEntry));
-    tail = head;
+    tlbHead = (struct tlbEntry *)malloc(sizeof(struct tlbEntry));
+    tlbTail = tlbHead;
     for (int i = 0; i < TLB_SIZE - 1; i++)
     {
-        tail->next = (struct tlbEntry *)malloc(sizeof(struct tlbEntry));
-        tail = tail->next;
-        tail->frameNumber = SENTINEL;
-        tail->pageNumber = SENTINEL;
+        tlbTail->next = (struct tlbEntry *)malloc(sizeof(struct tlbEntry));
+        tlbTail = tlbTail->next;
+        tlbTail->frameNumber = SENTINEL;
+        tlbTail->pageNumber = SENTINEL;
     }
-    tail->next = NULL;
+    tlbTail->next = NULL;
     return true;
 }
 
 unsigned int getFrameFromTLB(unsigned int pageNumber)
 {
-    struct tlbEntry *temp = head;
+    struct tlbEntry *temp = tlbHead;
     do
     {
         if (temp->pageNumber == pageNumber)
@@ -60,7 +60,7 @@ void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber)
     if (TLBSize < TLB_SIZE)
     {
         //there are still empty spots in the TLB, find a place to insert the value
-        struct tlbEntry *temp = head;
+        struct tlbEntry *temp = tlbHead;
         do
         {
             if (temp->pageNumber == SENTINEL)
@@ -75,21 +75,21 @@ void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber)
     }
     else
     {
-        //tlb is full, pop from queue and create new tlb at the head
-        struct tlbEntry *temp = head;
-        head = head->next;
+        //tlb is full, pop from queue and create new tlb at the tlbHead
+        struct tlbEntry *temp = tlbHead;
+        tlbHead = tlbHead->next;
         free(temp);
-        tail->next = (struct tlbEntry *)malloc(sizeof(struct tlbEntry));
-        tail = tail->next;
-        tail->frameNumber = frameNumber;
-        tail->pageNumber = pageNumber;
-        tail->next = NULL;
+        tlbTail->next = (struct tlbEntry *)malloc(sizeof(struct tlbEntry));
+        tlbTail = tlbTail->next;
+        tlbTail->frameNumber = frameNumber;
+        tlbTail->pageNumber = pageNumber;
+        tlbTail->next = NULL;
     }
 }
 
 void invalidatePageTLB(unsigned int p)
 {
-    struct tlbEntry *temp = head;
+    struct tlbEntry *temp = tlbHead;
     while (temp)
     {
         if (temp->pageNumber == p)
@@ -105,7 +105,7 @@ void invalidatePageTLB(unsigned int p)
 
 void printTLB()
 {
-    struct tlbEntry *temp = head;
+    struct tlbEntry *temp = tlbHead;
     while (temp)
     {
         printf("%u %u\n", temp->pageNumber, temp->frameNumber);
@@ -116,12 +116,12 @@ void printTLB()
 void freeTLB()
 {
     struct tlbEntry *temp;
-    while (head->next)
+    while (tlbHead->next)
     {
-        temp = head;
-        head = head->next;
+        temp = tlbHead;
+        tlbHead = tlbHead->next;
         free(temp);
     }
-    free(head);
+    free(tlbHead);
     initialized = false;
 }
