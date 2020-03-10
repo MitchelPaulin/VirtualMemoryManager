@@ -27,4 +27,9 @@ unsigned int popPageQueue();
 */
 void printPageQueue();
 
+/*
+    Free all resources allocated for the page table
+*/
+void freePageTable();
+
 #endif

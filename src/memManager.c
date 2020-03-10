@@ -53,6 +53,7 @@ int main(int argc, const char *argv[])
 
     fclose(fp);
     freeTLB();
+    freePageTable();
 
     return 0;
 }

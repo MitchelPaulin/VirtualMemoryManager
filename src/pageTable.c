@@ -61,3 +61,15 @@ void printPageQueue()
     }
     printf("\n");
 }
+
+void freePageTable()
+{
+    struct pageNumberEntry *temp;
+    while (pageHead != pageTail)
+    {
+        temp = pageHead;
+        pageHead = pageHead->next;
+        free(temp);
+    }
+    free(pageTail);
+}
