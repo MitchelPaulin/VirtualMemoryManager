@@ -17,6 +17,11 @@ char getValueAtPhysicalAddress(unsigned int address);
 bool initMemory();
 
 /*
+    Free all resources allocated for main memory
+*/
+void freeMem();
+
+/*
     If the frame is not currently in memory, load it from the backing store
     Returns the frame number it was loaded into
 */

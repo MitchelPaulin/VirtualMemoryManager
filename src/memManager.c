@@ -58,9 +58,11 @@ int main(int argc, const char *argv[])
         printf("Frame collision rate = %lf\n", (double)frameCollisions / (double)addressesTranslated);
     }
 
+    //Release resources
     fclose(fp);
     freeTLB();
     freePageTable();
+    freeMem();
 
     return 0;
 }

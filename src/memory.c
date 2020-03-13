@@ -11,13 +11,13 @@ char physicalMemory[FRAMES * PAGE_SIZE] = {};
 */
 unsigned int freeFramePointer = 0;
 
-FILE *fp;
+FILE *backingStore;
 
 bool initMemory()
 {
-    fp = fopen("../backingStore/BACKING_STORE.bin", "rb");
+    backingStore = fopen("../backingStore/BACKING_STORE.bin", "rb");
 
-    if (fp == NULL)
+    if (backingStore == NULL)
     {
         printf("Could not open the backing store\n");
         exit(0);
@@ -55,12 +55,17 @@ unsigned int loadValueFromBackingStore(unsigned int frameNumber)
     circularFreeFramePointer = freeFramePointer % FRAMES;
 
     // Read from backing store
-    fseek(fp, frameNumber * PAGE_SIZE, SEEK_SET);
+    fseek(backingStore, frameNumber * PAGE_SIZE, SEEK_SET);
     for (int i = 0; i < PAGE_SIZE; i++)
     {
-        fread(&physicalMemory[circularFreeFramePointer * PAGE_SIZE + i], sizeof(char), 1, fp);
+        fread(&physicalMemory[circularFreeFramePointer * PAGE_SIZE + i], sizeof(char), 1, backingStore);
     }
-    
+
     freeFramePointer++;
     return circularFreeFramePointer;
+}
+
+void freeMem()
+{
+    fclose(backingStore);
 }
