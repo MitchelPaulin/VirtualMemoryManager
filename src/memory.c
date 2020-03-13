@@ -43,16 +43,15 @@ unsigned int loadValueFromBackingStore(unsigned int frameNumber)
 
     unsigned int circularFreeFramePointer = freeFramePointer;
 
-    if (freeFramePointer > FRAMES)
+    if (freeFramePointer >= FRAMES)
     {
         frameOverwritten = 1;
+        circularFreeFramePointer = freeFramePointer % FRAMES;
     }
     else
     {
         frameOverwritten = 0;
     }
-
-    circularFreeFramePointer = freeFramePointer % FRAMES;
 
     // Read from backing store
     fseek(backingStore, frameNumber * PAGE_SIZE, SEEK_SET);

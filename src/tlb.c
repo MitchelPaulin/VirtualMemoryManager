@@ -51,7 +51,7 @@ unsigned int getFrameFromTLB(unsigned int pageNumber)
         }
         temp = temp->next;
     } while (temp);
-    //tlb miss
+    //TLB miss
     return SENTINEL;
 }
 
@@ -75,7 +75,7 @@ void insertIntoTLB(unsigned int pageNumber, unsigned int frameNumber)
     }
     else
     {
-        // Tlb is full, pop from queue and create new tlb at the tlbHead
+        // TLB is full, pop from queue and create new TLB at the tlbHead
         struct tlbEntry *temp = tlbHead;
         tlbHead = tlbHead->next;
         free(temp);
